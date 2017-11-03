@@ -45,6 +45,13 @@ def main_menu():
     elif keyword == 'dilate':
         zoom = float(input_parse[1])
         shape.dilate(zoom)
+    elif keyword == 'rotate':
+        deg = float(input_parse[1])
+        x = float(input_parse[2])
+        y = float(input_parse[3])
+        shape.rotate(deg, x, y)
+    elif keyword == 'exit':
+    	glutLeaveMainLoop()
 
     glutPostRedisplay()
 
