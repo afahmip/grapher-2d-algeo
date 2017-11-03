@@ -3,6 +3,8 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import sys
+import time
+import math
 
 
 DEBUG = True
@@ -38,19 +40,37 @@ def main_menu():
 
     if keyword == 'input':
         input_matrix()
+
     elif keyword == 'translate':
         dx = float(input_parse[1])
         dy = float(input_parse[2])
         shape.translate(dx, dy)
+
     elif keyword == 'dilate':
         zoom = float(input_parse[1])
         shape.dilate(zoom)
+
+    elif keyword == 'rotate':
+        deg = float(input_parse[1])
+        x = float(input_parse[2])
+        y = float(input_parse[3])
+        shape.rotate(deg, x, y)
+
+    elif keyword == 'reflect':
+        param = input_parse[1]
+        shape.reflect(param)
+
+    elif keyword == 'exit':
+    	glutLeaveMainLoop()
+
+    else :
+    	print("Wrong input!")
 
     glutPostRedisplay()
 
 
 def draw_graph():
-    glColor3f(206/255, 206/255, 206/255)
+    glColor3f(226/255, 226/255, 226/255)
     glLineWidth(0.01)
     glBegin(GL_LINES)
     for i in range(-24, 25):
@@ -63,12 +83,21 @@ def draw_graph():
     glColor3f(130/255, 130/255, 130/255)
     glLineWidth(2.0)
     glBegin(GL_LINES)
+    for i in range(-4, 5):
+    	glVertex2f(i/5, 0.025)
+    	glVertex2f(i/5,-0.025)
+    	glVertex2f(0.025, i/5)
+    	glVertex2f(-0.025, i/5)
+    glEnd()
+
+    glColor3f(130/255, 130/255, 130/255)
+    glLineWidth(2.0)
+    glBegin(GL_LINES)
     glVertex2f(0.0, 1.0)
     glVertex2f(0.0, -1.0)
     glVertex2f(1.0, 0.0)
     glVertex2f(-1.0, 0.0)
     glEnd()
-
 
 def cartesian():
     glClear(GL_COLOR_BUFFER_BIT)
@@ -79,6 +108,7 @@ def cartesian():
 
 def draw_plane():
     global point_matrix, point_matrix_old, shape
+    DELAY = 0.001
 
     glClear(GL_COLOR_BUFFER_BIT)
     draw_graph()
@@ -95,17 +125,16 @@ def draw_plane():
     shape.print_point()
     for x in point_matrix:
         glVertex2f(x[0]/500, x[1]/500)
+    
     glEnd()
-
     glFlush()
-
 
 def main():
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
     glutInitWindowSize(500, 500)
     glutInitWindowPosition(50, 50)
-    glutCreateWindow('Ayy LMAO')
+    glutCreateWindow('Tubes Algeo II')
     glutDisplayFunc(draw_plane)
     glutIdleFunc(main_menu)
     init()
